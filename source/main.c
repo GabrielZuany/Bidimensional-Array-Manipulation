@@ -1,24 +1,27 @@
 #include <stdio.h>
 #include "../libs/include/list.h"
+#include "../libs/include/matrix.h"
 
 int main()
 {
-    int n, val;
+    int n = 2, m = 2;
+    double val = 1;
 
-    List *l = list_construct();
+    Matrix *matrix = matrix_construct();
+    matrix_set_row_size(matrix, n);
+    matrix_set_column_size(matrix, m);
+    matrix_rows_init(matrix, n);
+    matrix_columns_init(matrix, m);
 
-    n = 200000;
-
-    for (int i = 0; i < n; i++)
-    {
-        list_push_back(l, i, NULL);
+    //fill matrix
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            
+        }
     }
+    
 
-    for (int i = 0; i < n; i++)
-        printf("%d\n", list_get(l, i));
-
-    // test the destroy function
-    list_destroy(l);
+    matrix_destroy(matrix);
 
     return 0;
 }

@@ -3,22 +3,30 @@
 
 #include "../include/axis_coordinates.h"
 
-typedef int data_type;
+typedef double data_type;
 typedef struct Node Node;
 
-Node *node_construct(data_type value, Node *next, Node *prev, AxisCoordinates *coordinates);
+Node* node_construct(data_type value, Node *row_next, Node *row_prev, Node *column_next, Node *column_prev, AxisCoordinates *coordinates);
 
-Node* node_get_next(Node *n);
+Node* node_get_row_next(Node *n);
 
-Node* node_get_previous(Node *n);
+Node* node_get_row_previous(Node *n);
+
+Node* node_get_column_next(Node *n);
+
+Node* node_get_column_previous(Node *n);
 
 data_type node_get_value(Node *n);
 
-Node* node_get_coordinates(Node *n);
+AxisCoordinates* node_get_coordinates(Node *n);
 
-void node_set_next(Node *n, Node *next);
+void node_set_row_next(Node *n, Node *next);
 
-void node_set_previous(Node *n, Node *prev);
+void node_set_row_previous(Node *n, Node *prev);
+
+void node_set_column_next(Node *n, Node *next);
+
+void node_set_column_previous(Node *n, Node *prev);
 
 void node_set_value(Node *n, data_type value);
 

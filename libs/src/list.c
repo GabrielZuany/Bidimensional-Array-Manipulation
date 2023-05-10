@@ -23,12 +23,12 @@ int list_size(List *l){
 }
 
 void list_push_front(List *l, data_type data, AxisCoordinates *coordinates){
-    Node * N = node_construct(data, l->head, NULL, coordinates);
+    Node * N = node_construct(data, l->head, NULL, NULL, NULL, coordinates);
     if(l->size == 0){
         l->head = N;
         l->last = N;
     }else{
-        node_set_previous(l->head, N);
+        node_set_row_previous(l->head, N);
     }
     l->head = N;
     l->size++;
@@ -36,14 +36,14 @@ void list_push_front(List *l, data_type data, AxisCoordinates *coordinates){
 }
 
 void list_push_back(List *l, data_type data, AxisCoordinates *coordinates){
-    Node * N = node_construct(data, NULL, l->last, coordinates);
+    Node * N = node_construct(data, NULL, l->last, NULL, NULL, coordinates);
     if(l->size == 0){
         l->head = N;
         l->last = N;
     }
     else{
-        node_set_next(l->last, N);
-        l->last = node_get_next(l->last);
+        node_set_row_next(l->last, N);
+        l->last = node_get_row_next(l->last);
     }
     l->size++;
 }
@@ -53,10 +53,10 @@ void list_print(List *l, void (*print_fn)(data_type)){
     printf("[");
     while(l->head != NULL){
         print_fn(node_get_value(l->head));
-        if(node_get_next(l->head) != NULL) 
+        if(node_get_row_next(l->head) != NULL) 
             printf(", "); 
 
-        l->head = node_get_next(l->head);
+        l->head = node_get_row_next(l->head);
     }
     printf("]");
     l->head = reference;
@@ -68,10 +68,10 @@ void list_print_reverse(List *l, void (*print_fn)(data_type)){
     printf("[");
     while(last_ref != NULL){
         print_fn(node_get_value(last_ref));
-        if(node_get_previous(last_ref) != NULL) 
+        if(node_get_row_previous(last_ref) != NULL) 
             printf(", "); 
 
-        last_ref = node_get_previous(last_ref);
+        last_ref = node_get_row_previous(last_ref);
     }
     printf("]");
 }
@@ -88,35 +88,35 @@ data_type list_get(List *l, int i){
             l->head = reference;
             return val;
         }
-        l->head = node_get_next(l->head);
+        l->head = node_get_row_next(l->head);
         count++;
     }
     return -999;
 }
 
 data_type list_pop_front(List *l){
-    Node* reference = node_get_next(l->head);
+    Node* reference = node_get_row_next(l->head);
     data_type val = node_get_value(l->head);
     
     free(l->head);
 
     l->head = reference;
     if(l->head != NULL)
-        node_set_previous(l->head, NULL);
+        node_set_row_previous(l->head, NULL);
     l->size--;
 
     return val;
 }
 
 data_type list_pop_back(List *l){
-    Node* reference = node_get_previous(l->last);
+    Node* reference = node_get_row_previous(l->last);
     data_type val = node_get_value(l->last);
     
     free(l->last);
 
     l->last = reference;
     if(l->last != NULL)
-        node_set_next(l->last, NULL);
+        node_set_row_next(l->last, NULL);
     l->size--;
 
     return val;
@@ -139,12 +139,12 @@ void list_remove(List *l, data_type val){
     while (n != NULL) {
         if (node_get_value(n) == val) {
             if (prev == NULL){
-                new_n = node_get_next(n);
+                new_n = node_get_row_next(n);
                 l->head = new_n;
             }
             else{
-                new_n = node_get_next(n);
-                node_set_next(prev, new_n);
+                new_n = node_get_row_next(n);
+                node_set_row_next(prev, new_n);
             }
             node_destroy(n);
             n = new_n;
@@ -152,7 +152,7 @@ void list_remove(List *l, data_type val){
         }
         else {
             prev = n;
-            n = node_get_next(n);
+            n = node_get_row_next(n);
         }
     }
 }
@@ -160,13 +160,13 @@ void list_remove(List *l, data_type val){
 void list_cat(List *l, List *m){
     Node* reference = l->head;
     while(l->head != NULL){
-        l->head = node_get_next(l->head);
+        l->head = node_get_row_next(l->head);
     }
     l->head = m->head;
     l->head = reference;
 }
 
 void list_destroy(List *l){
-    node_destroy_recursive(l->head);
+    node_destroy_Rec(l->head);
     free(l);
 }
