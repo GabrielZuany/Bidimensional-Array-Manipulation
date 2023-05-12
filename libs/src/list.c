@@ -18,6 +18,10 @@ List *list_construct(){
     return list;
 }
 
+Node* list_get_head(List *l){
+    return l->head;
+}
+
 int list_size(List *l){
     return l->size;
 }
@@ -53,12 +57,14 @@ void list_print(List *l, void (*print_fn)(data_type)){
     printf("[");
     while(l->head != NULL){
         print_fn(node_get_value(l->head));
-        if(node_get_row_next(l->head) != NULL) 
+        if(node_get_row_next(l->head) != NULL){
+            node_print_coordinates(l->head);
             printf(", "); 
+        }
 
         l->head = node_get_row_next(l->head);
     }
-    printf("]");
+    printf("]\n");
     l->head = reference;
 }
 

@@ -16,6 +16,8 @@ typedef struct List List;
  */
 List *list_construct();
 
+Node* list_get_head(List *l);
+
 /**
  * @brief Returns the size of the linked list.
  *  Returns the number of nodes in the linked list.

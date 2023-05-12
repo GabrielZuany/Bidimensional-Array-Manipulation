@@ -8,6 +8,10 @@ typedef struct Matrix Matrix;
 
 Matrix *matrix_construct();
 
+void matrix_print_rows(Matrix *m, void (*fptr_print_fn)(data_type));
+
+void matrix_print_columns(Matrix *m, void (*fptr_print_fn)(data_type));
+
 void matrix_rows_init(Matrix *m, int size);
 
 void matrix_columns_init(Matrix *m, int size);
@@ -24,9 +28,13 @@ List *matrix_get_full_row(Matrix *m, int row);
 
 List *matrix_get_full_column(Matrix *m, int column);
 
-void insert_into_row(Matrix *m, int row, int column, data_type value);
+Node *matrix_get_node_by_coordinates(Matrix *m, int row, int column);
 
-void insert_into_column(Matrix *m, int row, int column, data_type value);
+void matrix_insert_element(Matrix* m, int row, int column, data_type value);
+
+void matrix_insert_row(Matrix *m, int row, int column, data_type value);
+
+void matrix_insert_column(Matrix *m, int row, int column, data_type value);
 
 void matrix_destroy(Matrix *m);
 

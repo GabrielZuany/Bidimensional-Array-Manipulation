@@ -60,12 +60,46 @@ List *matrix_get_full_column(Matrix *m, int column){
     return m->columns[column];
 }
 
-void insert_into_row(Matrix *m, int row, int column, data_type value){
-    list_push_back(m->rows[row], value, construct_axis_coordinates(row, column));
+Node *matrix_get_node_by_coordinates(Matrix *m, int row, int column){
+    List *list = m->rows[row];
+    Node *node = list_get_head(list);
+    while(node != NULL){
+        AxisCoordinates *axis_coordinates = node_get_coordinates(node);
+        if(axis_coordenates_get_y(axis_coordinates) == column){
+            return node;
+        }
+        node = node_get_row_next(node);
+    }
+    return NULL;
 }
 
-void insert_into_column(Matrix *m, int row, int column, data_type value){
-    list_push_back(m->columns[column], value, construct_axis_coordinates(row, column));
+void matrix_insert_element(Matrix* m, int row, int column, data_type value){
+    matrix_insert_row(m, row, column, value);
+    matrix_insert_column(m, row, column, value);
+}
+
+void matrix_insert_row(Matrix *m, int row, int column, data_type value){
+    AxisCoordinates *axis_coordinates = NULL;
+    axis_coordinates = construct_axis_coordinates(row, column);
+    list_push_back(m->rows[row], value, axis_coordinates);
+}
+
+void matrix_insert_column(Matrix *m, int row, int column, data_type value){
+    AxisCoordinates *axis_coordinates = NULL;
+    axis_coordinates = construct_axis_coordinates(row, column);
+    list_push_back(m->columns[column], value, axis_coordinates);
+}
+
+void matrix_print_rows(Matrix *m, void (*fptr_print_fn)(data_type)){
+    for(int i = 0; i < m->rows_size; i++){
+        list_print(m->rows[i], fptr_print_fn);
+    }
+}
+
+void matrix_print_columns(Matrix *m, void (*fptr_print_fn)(data_type)){
+    for(int i = 0; i < m->columns_size; i++){
+        list_print(m->columns[i], fptr_print_fn);
+    }
 }
 
 void matrix_destroy(Matrix *m){

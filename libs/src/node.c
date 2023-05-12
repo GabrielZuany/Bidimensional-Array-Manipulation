@@ -73,7 +73,8 @@ void node_set_coordinates(Node *n, AxisCoordinates *coordinates){
 }
 
 void node_print_coordinates(Node *n){
-    printf("(%d, %d)\n", axis_coordenates_get_x(node_get_coordinates(n)), axis_coordenates_get_y(node_get_coordinates(n)));
+    AxisCoordinates *coordinates = node_get_coordinates(n);
+    printf("(%d, %d)", axis_coordenates_get_x(coordinates), axis_coordenates_get_y(coordinates));
 }
 
 void node_destroy(Node *n){
@@ -84,6 +85,7 @@ void node_destroy_Rec(Node* n){
     if (n==NULL){
         return;
     }
+    axis_coordenates_destroy(node_get_coordinates(n));
     node_destroy_Rec(n->row_next);
     node_destroy(n);
 }

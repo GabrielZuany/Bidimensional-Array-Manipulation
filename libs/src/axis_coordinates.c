@@ -23,6 +23,10 @@ int axis_coordenates_get_y(AxisCoordinates *coordinates){
     return coordinates->y;
 }
 
+void axis_coordenates_print(AxisCoordinates *coordinates){
+    printf("(%d, %d)", coordinates->x, coordinates->y);
+}
+
 void axis_coordenates_destroy(AxisCoordinates *coordinates){
     free(coordinates);
 }
