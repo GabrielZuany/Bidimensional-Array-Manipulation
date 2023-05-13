@@ -41,6 +41,9 @@ Node* node_get_column_previous(Node *n){
 }
 
 data_type node_get_value(Node *n){
+    if(n == NULL){
+        return null;
+    }
     return n->value;
 }
 

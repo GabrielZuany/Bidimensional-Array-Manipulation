@@ -30,11 +30,13 @@ List *matrix_get_full_column(Matrix *m, int column);
 
 Node *matrix_get_node_by_coordinates(Matrix *m, int row, int column);
 
-void matrix_insert_element(Matrix* m, int row, int column, data_type value);
+void matrix_replace_element(Matrix* m, int row, int column, data_type value);
 
-void matrix_insert_row(Matrix *m, int row, int column, data_type value);
+void matrix_fill(Matrix *m, data_type *values);
 
-void matrix_insert_column(Matrix *m, int row, int column, data_type value);
+void matrix_fill_zeros(Matrix *m);
+
+void matrix_fix_nodes(Matrix *m);
 
 void matrix_destroy(Matrix *m);
 

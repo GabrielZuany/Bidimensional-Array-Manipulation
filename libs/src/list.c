@@ -22,6 +22,10 @@ Node* list_get_head(List *l){
     return l->head;
 }
 
+void list_set_head(List *l, Node *head){
+    l->head = head;
+}
+
 int list_size(List *l){
     return l->size;
 }
@@ -36,11 +40,15 @@ void list_push_front(List *l, data_type data, AxisCoordinates *coordinates){
     }
     l->head = N;
     l->size++;
-    
 }
 
 void list_push_back(List *l, data_type data, AxisCoordinates *coordinates){
-    Node * N = node_construct(data, NULL, l->last, NULL, NULL, coordinates);
+    Node *row_next = NULL;
+    Node *row_previous = l->last;
+    Node *column_next = NULL;
+    Node *column_previous = NULL;
+
+    Node * N = node_construct(data, row_next, row_previous, column_next, column_previous, coordinates);
     if(l->size == 0){
         l->head = N;
         l->last = N;
@@ -57,8 +65,7 @@ void list_print(List *l, void (*print_fn)(data_type)){
     printf("[");
     while(l->head != NULL){
         print_fn(node_get_value(l->head));
-        if(node_get_row_next(l->head) != NULL){
-            node_print_coordinates(l->head);
+        if(node_get_row_next(l->head) != NULL){ 
             printf(", "); 
         }
 

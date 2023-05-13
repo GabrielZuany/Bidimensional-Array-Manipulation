@@ -1,5 +1,6 @@
 #ifndef _NODE_H_
 #define _NODE_H_
+#define null 0.0000001
 
 #include "../include/axis_coordinates.h"
 
