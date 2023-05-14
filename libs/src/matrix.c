@@ -77,11 +77,32 @@ Node *matrix_get_node_by_coordinates(Matrix *m, int row, int column){
     return NULL;
 }
 
+void matrix_print(Matrix *m){
+    int i = 0, j = 0;
+    for(i = 0; i < m->rows_size; i++){
+        printf("[");
+        for(j = 0; j < m->columns_size; j++){
+            Node *node = matrix_get_node_by_coordinates(m, i, j);
+            if(node == NULL){
+                printf("NULL, ");
+            }else{
+                printf("%.2lf, ", node_get_value(node));
+            }
+        }
+        printf("]");
+        printf("\n");
+    }
+}
+
 //fill with zeros
 void matrix_fill_zeros(Matrix *m){
+    int v = 0;
     for(int i = 0; i < m->rows_size; i++){
         for(int j = 0; j < m->columns_size; j++){
-            list_push_back(m->rows[i], 0, construct_axis_coordinates(i, j));
+            if(v == 0){
+                continue;
+            }
+            list_push_back(m->rows[i], v, construct_axis_coordinates(i, j));
         }
     }
 }
@@ -102,6 +123,8 @@ void matrix_fill(Matrix *m, data_type *values){
 }
 
 void matrix_fix_nodes(Matrix *m){
+    int row = 0, column = 0;
+
     for(int i = 0; i < m->rows_size; i++){
         List *list = m->rows[i];
         List *next_list = list;
@@ -119,10 +142,10 @@ void matrix_fix_nodes(Matrix *m){
         Node *below_next_node = list_get_head(next_list);
         Node *above_previous_node = list_get_head(previous_list);
 
-        while(node != NULL){
+        while(column < m->columns_size && node != NULL){
             AxisCoordinates *axis_coordinates = node_get_coordinates(node);
-            int row = axis_coordenates_get_x(axis_coordinates);
-            int column = axis_coordenates_get_y(axis_coordinates);
+            row = axis_coordenates_get_x(axis_coordinates);
+            column = axis_coordenates_get_y(axis_coordinates);
             
             // fix the matrix edges (columns nodes)
             if(row == 0){
@@ -146,6 +169,9 @@ void matrix_fix_nodes(Matrix *m){
             }
 
             node = node_get_row_next(node);
+            if(node == NULL){
+                break;
+            }
             above_previous_node = node_get_row_next(above_previous_node);
             below_next_node = node_get_row_next(below_next_node);
         }
@@ -155,7 +181,15 @@ void matrix_fix_nodes(Matrix *m){
 
 void matrix_replace_element(Matrix* m, int row, int column, data_type value){
     Node* n = matrix_get_node_by_coordinates(m, row, column);
-    node_set_value(n, value);
+    if(n==NULL){
+        printf("Node not found, creating new node\n");
+        AxisCoordinates *axis_coordinates = construct_axis_coordinates(row, column);
+        n = node_construct(value, NULL, NULL, NULL, NULL, axis_coordinates);
+        list_push_back(m->rows[row], value, axis_coordinates);
+        matrix_fix_nodes(m);
+    }else{
+        node_set_value(n, value);
+    }
 }
 
 void matrix_print_rows(Matrix *m, void (*fptr_print_fn)(data_type)){

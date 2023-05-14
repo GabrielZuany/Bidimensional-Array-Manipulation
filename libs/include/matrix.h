@@ -38,6 +38,8 @@ void matrix_fill_zeros(Matrix *m);
 
 void matrix_fix_nodes(Matrix *m);
 
+void matrix_print(Matrix *m);
+
 void matrix_destroy(Matrix *m);
 
 #endif 

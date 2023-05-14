@@ -26,6 +26,11 @@ void list_set_head(List *l, Node *head){
     l->head = head;
 }
 
+
+void list_set_last(List *l, Node *last){
+    l->last = last;
+}
+
 int list_size(List *l){
     return l->size;
 }
@@ -62,9 +67,11 @@ void list_push_back(List *l, data_type data, AxisCoordinates *coordinates){
 
 void list_print(List *l, void (*print_fn)(data_type)){
     Node* reference = l->head;
+    data_type value = null;
     printf("[");
     while(l->head != NULL){
-        print_fn(node_get_value(l->head));
+        value = node_get_value(l->head);
+        print_fn(value);
         if(node_get_row_next(l->head) != NULL){ 
             printf(", "); 
         }
