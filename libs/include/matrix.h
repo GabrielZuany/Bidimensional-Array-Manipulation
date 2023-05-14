@@ -40,6 +40,14 @@ void matrix_fix_nodes(Matrix *m);
 
 void matrix_print(Matrix *m);
 
+Matrix *matrix_sum(Matrix* m1, Matrix* m2);
+
+Matrix *matrix_multiplication_by_coordinates(Matrix* m1, Matrix* m2);
+
+Matrix *matrix_multiplication_by_value(Matrix* m1, data_type value);
+
+Matrix *matrix_multiplication(Matrix *m1, Matrix *m2);
+
 void matrix_destroy(Matrix *m);
 
 #endif 

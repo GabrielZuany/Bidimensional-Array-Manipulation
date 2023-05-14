@@ -25,18 +25,30 @@ Node* node_construct(data_type value, Node *row_next, Node *row_prev, Node *colu
 }
 
 Node* node_get_row_next(Node *n){
+    if(n == NULL){
+        return NULL;
+    }
     return n->row_next;
 }
 
 Node* node_get_row_previous(Node *n){
+    if(n == NULL){
+        return NULL;
+    }
     return n->row_prev;
 }
 
 Node* node_get_column_next(Node *n){
+    if(n == NULL){
+        return NULL;
+    }
     return n->column_next;
 }
 
 Node* node_get_column_previous(Node *n){
+    if(n == NULL){
+        return NULL;
+    }
     return n->column_prev;
 }
 

@@ -15,36 +15,40 @@ int main()
     double val = 0;
 
     Matrix *matrix = matrix_construct();
+    Matrix *matrix2 = matrix_construct();
+
     matrix_set_row_size(matrix, n);
     matrix_set_column_size(matrix, m);
     matrix_rows_init(matrix, n);
     matrix_columns_init(matrix, m);
 
-    data_type values[9] = {0,0,10,2,3,0,3,8,0};
+    matrix_set_row_size(matrix2, n);
+    matrix_set_column_size(matrix2, m);
+    matrix_rows_init(matrix2, n);
+    matrix_columns_init(matrix2, m);
 
-    //for(int i = 0; i < n*m; i++){
-    //    values[i] = val;
-    //    val++;
-    //}
+    data_type values[9] = {0,0,10,2,3,0,3,8,0};
+    data_type values2[9] = {1,1,10,2,0,0,0,8,0};
 
     matrix_fill(matrix, values);
     matrix_fix_nodes(matrix);
-    
+
+    matrix_fill(matrix2, values2);
+    matrix_fix_nodes(matrix2);
+
+
     matrix_print(matrix);
-    //matrix_print_rows(matrix, print_double);
     printf("\n---\n");
-    matrix_print_columns(matrix, print_double);
 
-    //get node by coordinates
-    //Node *node = matrix_get_node_by_coordinates(matrix, 1, 1);
-    //printf("\nNode value: %.2lf\n", node_get_value(node));
-    //printf("Node above value: %.2lf\n", node_get_value(node_get_column_previous(node)));
-    //printf("Node below value: %.2lf\n", node_get_value(node_get_column_next(node)));
-    //printf("Node left value: %.2lf\n", node_get_value(node_get_row_previous(node)));
-    //printf("Node right value: %.2lf\n", node_get_value(node_get_row_next(node)));
+    matrix_print(matrix2);
+    printf("\n---\n");
 
+    Matrix *matrix3 = matrix_multiplication(matrix, matrix2);
+    matrix_print(matrix3);
+    printf("\n---\n");
 
     matrix_destroy(matrix);
-
+    matrix_destroy(matrix2);
+    matrix_destroy(matrix3);
     return 0;
 }
