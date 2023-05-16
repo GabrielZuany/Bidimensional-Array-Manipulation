@@ -48,6 +48,8 @@ Matrix *matrix_multiplication_by_value(Matrix* m1, data_type value);
 
 Matrix *matrix_multiplication(Matrix *m1, Matrix *m2);
 
+void matrix_swap_rows(Matrix *m, int row1, int row2);
+
 void matrix_destroy(Matrix *m);
 
 #endif 

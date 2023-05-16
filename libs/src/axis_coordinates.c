@@ -24,6 +24,10 @@ int axis_coordenates_get_y(AxisCoordinates *coordinates){
 }
 
 void axis_coordenates_print(AxisCoordinates *coordinates){
+    if(coordinates == NULL){
+        printf("NULL");
+        return;
+    }
     printf("(%d, %d)", coordinates->x, coordinates->y);
 }
 

@@ -309,6 +309,11 @@ Matrix *matrix_multiplication_by_value(Matrix* m1, data_type value){
 }
 
 Matrix *matrix_multiplication(Matrix *m1, Matrix *m2){
+    if(m1->columns_size != m2->rows_size){
+        printf("Error: matrix_multiplication: rows of matrix 1 must be same size of matrix 2 columns\n");
+        return NULL;
+    }
+
     Matrix *m = matrix_construct(m1->rows_size, m2->columns_size);
     matrix_set_row_size(m, m1->rows_size);
     matrix_set_column_size(m, m2->columns_size);
@@ -316,13 +321,41 @@ Matrix *matrix_multiplication(Matrix *m1, Matrix *m2){
     matrix_columns_init(m, m2->columns_size);
     Node *n1 = NULL;
     Node *n2 = NULL;
-    int count = 0;
+    int m1_row_index = 0, m1_column_index = 0, m2_row_index = 0, m2_column_index = 0;
+    data_type sum = 0;
     data_type values[m1->rows_size*m2->columns_size];
 
-
+    for(m1_row_index = 0; m1_row_index < m1->rows_size; m1_row_index++){
+        for(m2_column_index = 0; m2_column_index < m2->columns_size; m2_column_index++){
+            sum = 0;
+            for(m1_column_index = 0, m2_row_index = 0; m1_column_index < m1->columns_size; m1_column_index++, m2_row_index++){
+                n1 = matrix_get_node_by_coordinates(m1, m1_row_index, m1_column_index);
+                n2 = matrix_get_node_by_coordinates(m2, m2_row_index, m2_column_index);
+                if(n1 != NULL && n2 != NULL){
+                    sum += node_get_value(n1) * node_get_value(n2);
+                }
+            }
+            values[m1_row_index*m2->columns_size + m2_column_index] = sum;
+        }
+    }
     matrix_fill(m, values);
     matrix_fix_nodes(m);
     return m;
+}
+
+void matrix_swap_rows(Matrix *m, int row1, int row2){
+    List* r1 = m->rows[row1];
+    int size = list_size(r1); // r1 and r2 must have same size.
+    int count = 0;
+    Node *n1[size];
+    Node *n2[size];
+    for(count = 0; count < size; count++){
+        n1[count] = matrix_get_node_by_coordinates(m, row1, count);
+        n2[count] = matrix_get_node_by_coordinates(m, row2, count);
+    }
+    for(count = 0; count < size; count++){
+        node_swap(n1[count], n2[count]);
+    }
 }
 
 void matrix_destroy(Matrix *m){

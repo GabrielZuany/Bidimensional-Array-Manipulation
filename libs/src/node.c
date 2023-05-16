@@ -60,6 +60,9 @@ data_type node_get_value(Node *n){
 }
 
 AxisCoordinates* node_get_coordinates(Node *n){
+    if(n == NULL){
+        return NULL;
+    }
     return n->coordinates;
 }
 
@@ -84,7 +87,35 @@ void node_set_value(Node *n, data_type value){
 }
 
 void node_set_coordinates(Node *n, AxisCoordinates *coordinates){
+    if(n == NULL){
+        return;
+    }
     n->coordinates = coordinates;
+}
+
+void node_swap(Node* n1, Node* n2){
+    AxisCoordinates* n1_coordinates = node_get_coordinates(n1);
+    data_type n1_value = node_get_value(n1);
+
+    AxisCoordinates* n2_coordinates = node_get_coordinates(n2);
+    data_type n2_value = node_get_value(n2);
+
+    if(n1 == NULL && n2 == NULL){
+        return;
+    }else if(n1 == NULL && n2 != NULL){
+        n1 = node_construct(n2_value, NULL, NULL, NULL, NULL, n2_coordinates);
+        node_destroy(n2);
+        return;
+    }else if(n1 != NULL && n2 == NULL){
+        n2 = node_construct(n1_value, NULL, NULL, NULL, NULL, n1_coordinates);
+        node_destroy(n1);
+        return;
+    }
+    
+    node_set_coordinates(n1, n2_coordinates);
+    node_set_value(n1, n2_value);
+    node_set_coordinates(n2, n1_coordinates);
+    node_set_value(n2, n1_value);
 }
 
 void node_print_coordinates(Node *n){
@@ -93,6 +124,9 @@ void node_print_coordinates(Node *n){
 }
 
 void node_destroy(Node *n){
+    if (n==NULL){
+        return;
+    }
     free(n);
 }
 
@@ -100,7 +134,10 @@ void node_destroy_Rec(Node* n){
     if (n==NULL){
         return;
     }
-    axis_coordenates_destroy(node_get_coordinates(n));
+    if(node_get_coordinates(n) != NULL){
+        axis_coordenates_destroy(node_get_coordinates(n));
+    }
+    
     node_destroy_Rec(n->row_next);
     node_destroy(n);
 }
