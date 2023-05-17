@@ -12,8 +12,6 @@ void matrix_print_rows(Matrix *m, void (*fptr_print_fn)(data_type));
 
 void matrix_rows_init(Matrix *m, int size);
 
-void matrix_columns_init(Matrix *m, int size);
-
 void matrix_set_row_size(Matrix *m, int size);
 
 void matrix_set_column_size(Matrix *m, int size);

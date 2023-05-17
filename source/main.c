@@ -12,7 +12,6 @@ void print_double(data_type value){
 int main()
 {
     int n = 3, m = 3;
-    double val = 0;
 
     Matrix *matrix2 = matrix_construct();
 

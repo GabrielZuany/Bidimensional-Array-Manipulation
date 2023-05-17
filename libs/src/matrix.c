@@ -144,7 +144,6 @@ Node* matrix_get_row_previous_valid_node(Matrix* m, int row_index, int column_in
 }
 
 void matrix_fix_nodes(Matrix *m){
-    int row = 0, column = 0;
     for(int i = 0; i < m->rows_size; i++){
         for(int j = 0; j < m->columns_size; j++){
             Node* node = matrix_get_node_by_coordinates(m, i, j);
@@ -338,7 +337,7 @@ Matrix *matrix_slice(Matrix* m, AxisCoordinates* init, AxisCoordinates* end){
         for(int j = column_init; j <= column_end; j++){
             n = matrix_get_node_by_coordinates(m, i, j);
             if(n == NULL){
-                values[count] == 0;
+                values[count] = 0;
                 count++;
                 continue;
             }

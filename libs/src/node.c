@@ -103,7 +103,6 @@ void node_swap_columns(Node* n1, Node* n2){
     if(n1 == NULL && n2 != NULL){
         n1 = n2; 
         AxisCoordinates *coordinates_n2 = node_get_coordinates(n2);
-        int x = axis_coordenates_get_x(coordinates_n2);
         int y = axis_coordenates_get_y(coordinates_n2);
         y--;
         axis_coordinates_update_y(coordinates_n2, y);
@@ -113,7 +112,6 @@ void node_swap_columns(Node* n1, Node* n2){
     if(n1 != NULL && n2 == NULL){
         n2 = n1;
         AxisCoordinates *coordinates_n1 = node_get_coordinates(n1);
-        int x = axis_coordenates_get_x(coordinates_n1);
         int y = axis_coordenates_get_y(coordinates_n1);
         y++;
         axis_coordinates_update_y(coordinates_n1, y);
