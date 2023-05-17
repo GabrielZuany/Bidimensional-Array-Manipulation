@@ -1,5 +1,5 @@
-# N-Dimensional-Array-Manipulation
-N dimensional array manipulation using linear algebra and linked lists data structure
+# Bidimensional-Array-Manipulation
+Bidimensional array manipulation using linear algebra and linked lists data structure
 
 > - Criar matriz e destruir matriz. [V]
 > - Ler valores de uma célula a partir da linha e coluna. [V]
