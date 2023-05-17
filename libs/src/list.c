@@ -186,6 +186,20 @@ void list_cat(List *l, List *m){
     l->head = reference;
 }
 
+void list_insert(List*l, Node* n, int index){
+    Node* reference = l->head;
+    int count = 0;
+    while(count < index){
+        l->head = node_get_row_next(l->head);
+        count++;
+    }
+    
+    
+    
+    l->head = reference;
+    l->size++;
+}
+
 void list_destroy(List *l){
     node_destroy_Rec(l->head);
     free(l);

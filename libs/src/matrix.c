@@ -44,10 +44,6 @@ void matrix_set_column_size(Matrix *m, int size){
     m->columns_size = size;
 }
 
-void matrix_update_column_head(Matrix *m, int index, Node *head){
-    list_set_head(m->columns[index], head);
-}
-
 int matrix_get_row_size(Matrix *m){
     return m->rows_size;
 }
@@ -58,10 +54,6 @@ int matrix_get_column_size(Matrix *m){
 
 List *matrix_get_full_row(Matrix *m, int row){
     return m->rows[row];
-}
-
-List *matrix_get_full_column(Matrix *m, int column){
-    return m->columns[column];
 }
 
 Node *matrix_get_node_by_coordinates(Matrix *m, int row, int column){
@@ -122,103 +114,69 @@ void matrix_fill(Matrix *m, data_type *values){
     }
 }
 
-void matrix_fix_nodes(Matrix *m){
-    int row = 0, column = 0;
-
-    for(int i = 0; i < m->rows_size; i++){
-        List *list = m->rows[i];
-        List *next_list = list;
-        List *previous_list = list;
-
-        if(i+1 < m->rows_size){
-            next_list = m->rows[i + 1];
+Node* matrix_get_column_next_valid_node(Matrix* m, int row_index, int column_index){
+    for(int i = row_index + 1; i < m->rows_size; i++){
+        Node* node = matrix_get_node_by_coordinates(m, i, column_index);
+        if(node != NULL){
+            return node;
         }
-
-        if(i != 0){
-            previous_list = m->rows[i - 1];
-        }
-
-        Node *node = list_get_head(list);
-        Node *below_next_node = list_get_head(next_list);
-        Node *above_previous_node = list_get_head(previous_list);
-
-        while(column < m->columns_size && node != NULL){
-            AxisCoordinates *axis_coordinates = node_get_coordinates(node);
-            row = axis_coordenates_get_x(axis_coordinates);
-            column = axis_coordenates_get_y(axis_coordinates);
-            
-            // fix the matrix edges (columns nodes)
-            if(row == 0){
-                node_set_column_previous(node, NULL);
-                node_set_column_next(node, below_next_node);
-            }else if(row == m->rows_size - 1){
-                node_set_column_previous(node, above_previous_node);
-                node_set_column_next(node, NULL);
-            }else{
-                node_set_column_previous(node, above_previous_node);
-                node_set_column_next(node, below_next_node);
-            }
-            
-            // fix the matrix edges (rows nodes)
-            if(column == 0){
-                node_set_row_previous(node, NULL);
-            }else if(column == m->columns_size - 1){
-                node_set_row_next(node, NULL);
-            }else{
-                node_set_row_next(node, node_get_row_next(node));
-            }
-
-            node = node_get_row_next(node);
-            if(node == NULL){
-                break;
-            }
-            above_previous_node = node_get_row_next(above_previous_node);
-            below_next_node = node_get_row_next(below_next_node);
-        }
-        m->rows[i] = list;
     }
+    return NULL;
 }
 
-void matrix_replace_element(Matrix* m, int row, int column, data_type value){
-    Node* n = matrix_get_node_by_coordinates(m, row, column);
-    Node* row_prev = NULL;
-    Node* row_next = NULL;
-    Node* column_prev = NULL;
-    Node* column_next = NULL;
+Node* matrix_get_column_previous_valid_node(Matrix* m, int row_index, int column_index){
+    for(int i = row_index - 1; i >= 0; i--){
+        Node* node = matrix_get_node_by_coordinates(m, i, column_index);
+        if(node != NULL){
+            return node;
+        }
+    }
+    return NULL;
+}
 
-    if(n==NULL){
-        printf("Node not found, creating new node\n");
-        AxisCoordinates *axis_coordinates = construct_axis_coordinates(row, column);
-        if(column != 0){
-            row_prev = matrix_get_node_by_coordinates(m, row, column - 1);
+Node* matrix_get_row_next_valid_node(Matrix* m, int row_index, int column_index){
+    for(int i = column_index + 1; i < m->columns_size; i++){
+        Node* node = matrix_get_node_by_coordinates(m, row_index, i);
+        if(node != NULL){
+            return node;
         }
-        if(row != 0){
-            column_prev = matrix_get_node_by_coordinates(m, row - 1, column);
+    }
+    return NULL;
+}
+
+Node* matrix_get_row_previous_valid_node(Matrix* m, int row_index, int column_index){
+    for(int i = column_index - 1; i >= 0; i--){
+        Node* node = matrix_get_node_by_coordinates(m, row_index, i);
+        if(node != NULL){
+            return node;
         }
-        if(column != m->columns_size - 1){
-            row_next = matrix_get_node_by_coordinates(m, row, column + 1);
+    }
+    return NULL;
+}
+
+void matrix_fix_nodes(Matrix *m){
+    int row = 0, column = 0;
+    for(int i = 0; i < m->rows_size; i++){
+        for(int j = 0; j < m->columns_size; j++){
+            Node* node = matrix_get_node_by_coordinates(m, i, j);
+            if(node == NULL){
+                continue;
+            }
+            Node* row_next = matrix_get_row_next_valid_node(m, i, j);
+            Node* row_prev = matrix_get_row_previous_valid_node(m, i, j);
+            Node* column_next = matrix_get_column_next_valid_node(m, i, j);
+            Node* column_prev = matrix_get_column_previous_valid_node(m, i, j);
+            node_set_row_next(node, row_next);
+            node_set_row_previous(node, row_prev);
+            node_set_column_next(node, column_next);
+            node_set_column_previous(node, column_prev);
         }
-        if(row != m->rows_size - 1){
-            column_next = matrix_get_node_by_coordinates(m, row + 1, column);
-        }
-        
-        n = node_construct(value, row_next, row_prev, column_next, column_prev, axis_coordinates);
-        //list_push_back(m->rows[row], value, axis_coordinates);
-        matrix_fix_nodes(m);
-    }else{
-        node_set_value(n, value);
     }
 }
 
 void matrix_print_rows(Matrix *m, void (*fptr_print_fn)(data_type)){
     for(int i = 0; i < m->rows_size; i++){
         list_print(m->rows[i], fptr_print_fn);
-    }
-}
-
-void matrix_print_columns(Matrix *m, void (*fptr_print_fn)(data_type)){
-    for(int i = 0; i < m->columns_size; i++){
-        list_print(m->columns[i], fptr_print_fn);
     }
 }
 
@@ -345,18 +303,23 @@ Matrix *matrix_multiplication(Matrix *m1, Matrix *m2){
 
 void matrix_swap_rows(Matrix *m, int row1, int row2){
     List* r1 = m->rows[row1];
-    int size = list_size(r1); // r1 and r2 must have same size.
-    int count = 0;
-    Node *n1[size];
-    Node *n2[size];
-    for(count = 0; count < size; count++){
-        n1[count] = matrix_get_node_by_coordinates(m, row1, count);
-        n2[count] = matrix_get_node_by_coordinates(m, row2, count);
-    }
-    for(count = 0; count < size; count++){
-        node_swap(n1[count], n2[count]);
-    }
+    List* r2 = m->rows[row2];
+    m->rows[row1] = r2;
+    m->rows[row2] = r1;
+    matrix_fix_nodes(m);
 }
+
+void matrix_insert_element(Matrix *m, int row, int column, data_type value){
+    Node *n = matrix_get_node_by_coordinates(m, row, column);
+    if(n != NULL){
+        node_set_value(n, value);
+        return;
+    }
+    n = node_construct(value, NULL, NULL, NULL, NULL, construct_axis_coordinates(row, column));
+    list_insert(m->rows[row], n, column);
+    matrix_fix_nodes(m);
+}
+
 
 void matrix_destroy(Matrix *m){
     for(int i = 0; i < m->rows_size; i++){

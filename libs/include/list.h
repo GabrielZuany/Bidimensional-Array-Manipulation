@@ -20,6 +20,7 @@ Node* list_get_head(List *l);
 
 void list_set_head(List *l, Node *head);
 void list_set_last(List *l, Node *last);
+void list_insert(List*l, Node* n, int index);
 
 /**
  * @brief Returns the size of the linked list.

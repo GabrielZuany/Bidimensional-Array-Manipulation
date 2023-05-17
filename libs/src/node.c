@@ -93,8 +93,7 @@ void node_set_coordinates(Node *n, AxisCoordinates *coordinates){
     n->coordinates = coordinates;
 }
 
-void node_swap(Node* n1, Node* n2){
-    AxisCoordinates* n1_coordinates = node_get_coordinates(n1);
+void node_swap(Node* n1, Node* n2){AxisCoordinates* n1_coordinates = node_get_coordinates(n1);
     data_type n1_value = node_get_value(n1);
 
     AxisCoordinates* n2_coordinates = node_get_coordinates(n2);
