@@ -8,7 +8,6 @@
 struct Matrix
 {
     List **rows;
-    List **columns;
     int rows_size;
     int columns_size;
 };
@@ -16,7 +15,6 @@ struct Matrix
 Matrix *matrix_construct(){
     Matrix *m = (Matrix *)malloc(sizeof(Matrix));
     m->rows = NULL;
-    m->columns = NULL;
     m->rows_size = 0;
     m->columns_size = 0;
     return m;
@@ -26,13 +24,6 @@ void matrix_rows_init(Matrix *m, int size){
     m->rows = (List **)malloc(sizeof(List *) * size);
     for(int i = 0; i < size; i++){
         m->rows[i] = list_construct();
-    }
-}
-
-void matrix_columns_init(Matrix *m, int size){
-    m->columns = (List **)malloc(sizeof(List *) * size);
-    for(int i = 0; i < size; i++){
-        m->columns[i] = list_construct();
     }
 }
 
@@ -89,7 +80,6 @@ void matrix_print(Matrix *m){
     }
 }
 
-//fill with zeros
 void matrix_fill_zeros(Matrix *m){
     int v = 0;
     for(int i = 0; i < m->rows_size; i++){
@@ -99,7 +89,6 @@ void matrix_fill_zeros(Matrix *m){
     }
 }
 
-//fill the matrix
 void matrix_fill(Matrix *m, data_type *values){
     int index = 0;
     for(int i = 0; i < m->rows_size; i++){
@@ -185,7 +174,6 @@ Matrix *matrix_sum(Matrix* m1, Matrix* m2){
     matrix_set_row_size(m, m1->rows_size);
     matrix_set_column_size(m, m1->columns_size);
     matrix_rows_init(m, m1->rows_size);
-    matrix_columns_init(m, m1->columns_size);
     Node *n1 = NULL;
     Node *n2 = NULL;
     int count = 0;
@@ -217,7 +205,6 @@ Matrix *matrix_multiplication_by_coordinates(Matrix* m1, Matrix* m2){
     matrix_set_row_size(m, m1->rows_size);
     matrix_set_column_size(m, m1->columns_size);
     matrix_rows_init(m, m1->rows_size);
-    matrix_columns_init(m, m1->columns_size);
     Node *n1 = NULL;
     Node *n2 = NULL;
     int count = 0;
@@ -245,7 +232,6 @@ Matrix *matrix_multiplication_by_value(Matrix* m1, data_type value){
     matrix_set_row_size(m, m1->rows_size);
     matrix_set_column_size(m, m1->columns_size);
     matrix_rows_init(m, m1->rows_size);
-    matrix_columns_init(m, m1->columns_size);
     Node *n1 = NULL;
     int count = 0;
     data_type values[m1->rows_size*m1->columns_size];
@@ -276,7 +262,6 @@ Matrix *matrix_multiplication(Matrix *m1, Matrix *m2){
     matrix_set_row_size(m, m1->rows_size);
     matrix_set_column_size(m, m2->columns_size);
     matrix_rows_init(m, m1->rows_size);
-    matrix_columns_init(m, m2->columns_size);
     Node *n1 = NULL;
     Node *n2 = NULL;
     int m1_row_index = 0, m1_column_index = 0, m2_row_index = 0, m2_column_index = 0;
@@ -309,26 +294,93 @@ void matrix_swap_rows(Matrix *m, int row1, int row2){
     matrix_fix_nodes(m);
 }
 
+void matrix_swap_columns(Matrix *m, int column1, int column2){
+    int i = 0;
+    Node* n1 = NULL;
+    Node* n2 = NULL;
+    while(i < m->rows_size){
+        n1 = matrix_get_node_by_coordinates(m, i, column1);
+        n2 = matrix_get_node_by_coordinates(m, i, column2);
+        node_swap_columns(n1, n2);
+        i+=1;
+    }
+    matrix_fix_nodes(m);
+}
+
 void matrix_insert_element(Matrix *m, int row, int column, data_type value){
     Node *n = matrix_get_node_by_coordinates(m, row, column);
     if(n != NULL){
         node_set_value(n, value);
         return;
     }
-    n = node_construct(value, NULL, NULL, NULL, NULL, construct_axis_coordinates(row, column));
+    Node* row_next = matrix_get_row_next_valid_node(m, row, column);
+    Node* row_prev = matrix_get_row_previous_valid_node(m, row, column);
+    Node* column_next = matrix_get_column_next_valid_node(m, row, column);
+    Node* column_prev = matrix_get_column_previous_valid_node(m, row, column);
+    n = node_construct(value, row_next, row_prev, column_next, column_prev, construct_axis_coordinates(row, column));
     list_insert(m->rows[row], n, column);
-    matrix_fix_nodes(m);
 }
 
+Matrix *matrix_slice(Matrix* m, AxisCoordinates* init, AxisCoordinates* end){
+    Matrix *slice = matrix_construct();
+    int row_init = axis_coordenates_get_x(init);
+    int row_end = axis_coordenates_get_x(end);
+    int column_init = axis_coordenates_get_y(init);
+    int column_end = axis_coordenates_get_y(end);
+    matrix_set_row_size(slice, row_end - row_init + 1);
+    matrix_set_column_size(slice, column_end - column_init + 1);
+    matrix_rows_init(slice, row_end - row_init + 1);
+
+    data_type values[m->rows_size*m->columns_size];
+    Node* n = NULL;
+    int count = 0;
+    for(int i = row_init; i <= row_end; i++){
+        for(int j = column_init; j <= column_end; j++){
+            n = matrix_get_node_by_coordinates(m, i, j);
+            if(n == NULL){
+                values[count] == 0;
+                count++;
+                continue;
+            }
+            values[count] = node_get_value(n);
+            count++;
+        }
+    }
+    matrix_fill(slice, values);
+    matrix_fix_nodes(slice);
+    return slice;
+}
+
+Matrix *matrix_transpose(Matrix* m){
+    Matrix *m_T = matrix_construct();
+    matrix_set_row_size(m_T, m->columns_size);
+    matrix_set_column_size(m_T, m->rows_size);
+    matrix_rows_init(m_T, m->columns_size);
+
+    data_type values[m->rows_size*m->columns_size];
+    Node* n = NULL;
+    int count = 0;
+    for(int i = 0; i < m->columns_size; i++){
+        for(int j = 0; j < m->rows_size; j++){
+            n = matrix_get_node_by_coordinates(m, j, i);
+            if(n == NULL){
+                values[count] = 0;
+                count++;
+                continue;
+            }
+            values[count] = node_get_value(n);
+            count++;
+        }
+    }
+    matrix_fill(m_T, values);
+    matrix_fix_nodes(m_T);
+    return m_T;
+}
 
 void matrix_destroy(Matrix *m){
     for(int i = 0; i < m->rows_size; i++){
         list_destroy(m->rows[i]);
     }
-    for(int i = 0; i < m->columns_size; i++){
-        list_destroy(m->columns[i]);
-    }
     free(m->rows);
-    free(m->columns);
     free(m);
 }

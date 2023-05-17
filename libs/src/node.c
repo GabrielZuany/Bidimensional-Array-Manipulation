@@ -93,27 +93,35 @@ void node_set_coordinates(Node *n, AxisCoordinates *coordinates){
     n->coordinates = coordinates;
 }
 
-void node_swap(Node* n1, Node* n2){AxisCoordinates* n1_coordinates = node_get_coordinates(n1);
+void node_swap_columns(Node* n1, Node* n2){
     data_type n1_value = node_get_value(n1);
-
-    AxisCoordinates* n2_coordinates = node_get_coordinates(n2);
     data_type n2_value = node_get_value(n2);
 
     if(n1 == NULL && n2 == NULL){
         return;
-    }else if(n1 == NULL && n2 != NULL){
-        n1 = node_construct(n2_value, NULL, NULL, NULL, NULL, n2_coordinates);
-        node_destroy(n2);
+    }
+    if(n1 == NULL && n2 != NULL){
+        n1 = n2; 
+        AxisCoordinates *coordinates_n2 = node_get_coordinates(n2);
+        int x = axis_coordenates_get_x(coordinates_n2);
+        int y = axis_coordenates_get_y(coordinates_n2);
+        y--;
+        axis_coordinates_update_y(coordinates_n2, y);
+        node_set_coordinates(n1, coordinates_n2);
         return;
-    }else if(n1 != NULL && n2 == NULL){
-        n2 = node_construct(n1_value, NULL, NULL, NULL, NULL, n1_coordinates);
-        node_destroy(n1);
+    }
+    if(n1 != NULL && n2 == NULL){
+        n2 = n1;
+        AxisCoordinates *coordinates_n1 = node_get_coordinates(n1);
+        int x = axis_coordenates_get_x(coordinates_n1);
+        int y = axis_coordenates_get_y(coordinates_n1);
+        y++;
+        axis_coordinates_update_y(coordinates_n1, y);
+        node_set_coordinates(n2, coordinates_n1);
         return;
     }
     
-    node_set_coordinates(n1, n2_coordinates);
     node_set_value(n1, n2_value);
-    node_set_coordinates(n2, n1_coordinates);
     node_set_value(n2, n1_value);
 }
 

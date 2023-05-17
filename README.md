@@ -8,10 +8,8 @@ N dimensional array manipulation using linear algebra and linked lists data stru
 > - Multiplicação ponto a ponto entre matrizes: dadas duas matrizes M1 e M2, com as mesmas dimensões, a operação gera como saída uma matriz M3 com as mesmas dimensões das entradas e tal que M3(i, j) = M1(i, j) * M2(i, j). [V]
 > - Multiplicar matrizes. [V]
 > - Trocar (swap) duas linhas. [V]
-> - Atribuir valores à uma célula a partir da linha e coluna. [1/2]
-
-> - Ajeitar linked list das colunas.
-> - Trocar (swap) duas colunas.
-> - Slice: retornar a submatriz retangular definida por um ponto esquerdo superior (início) e um ponto direito inferior (fim).
-> - Transpor uma matriz.
+> - Slice: retornar a submatriz retangular definida por um ponto esquerdo superior (início) e um ponto direito inferior (fim). [V]
+> - Atribuir valores à uma célula a partir da linha e coluna. [V]
+> - Trocar (swap) duas colunas. [V]
+> - Transpor uma matriz. [V]
 > - Realizar a convolução de uma matriz por outra matriz chamada de kernel

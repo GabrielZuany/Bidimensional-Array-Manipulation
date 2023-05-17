@@ -34,3 +34,11 @@ void axis_coordenates_print(AxisCoordinates *coordinates){
 void axis_coordenates_destroy(AxisCoordinates *coordinates){
     free(coordinates);
 }
+
+void axis_coordinates_update_x(AxisCoordinates *coordinates, int x){
+    coordinates->x = x;
+}
+
+void axis_coordinates_update_y(AxisCoordinates *coordinates, int y){
+    coordinates->y = y;
+}

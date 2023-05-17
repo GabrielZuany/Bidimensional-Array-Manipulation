@@ -33,7 +33,7 @@ void node_set_value(Node *n, data_type value);
 
 void node_set_coordinates(Node *n, AxisCoordinates *coordinates);
 
-void node_swap(Node* n1, Node* n2);
+void node_swap_columns(Node* n1, Node* n2);
 
 void node_print_coordinates(Node *n);
 

@@ -13,4 +13,8 @@ void axis_coordenates_print(AxisCoordinates *coordinates);
 
 void axis_coordenates_destroy(AxisCoordinates *coordinates);
 
+void axis_coordinates_update_x(AxisCoordinates *coordinates, int x);
+
+void axis_coordinates_update_y(AxisCoordinates *coordinates, int y);
+
 #endif

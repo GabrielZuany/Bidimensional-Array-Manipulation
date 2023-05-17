@@ -44,7 +44,13 @@ Matrix *matrix_multiplication(Matrix *m1, Matrix *m2);
 
 void matrix_swap_rows(Matrix *m, int row1, int row2);
 
+void matrix_swap_columns(Matrix *m, int column1, int column2);
+
 void matrix_insert_element(Matrix *m, int row, int column, data_type value);
+
+Matrix *matrix_slice(Matrix* m, AxisCoordinates* init, AxisCoordinates* end);
+
+Matrix *matrix_transpose(Matrix* m);
 
 void matrix_destroy(Matrix *m);
 

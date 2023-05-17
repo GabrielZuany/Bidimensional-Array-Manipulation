@@ -188,13 +188,22 @@ void list_cat(List *l, List *m){
 
 void list_insert(List*l, Node* n, int index){
     Node* reference = l->head;
-    int count = 0;
-    while(count < index){
-        l->head = node_get_row_next(l->head);
-        count++;
+    AxisCoordinates *head_coordinates = node_get_coordinates(l->head);
+
+    if(l->size == 0){
+        l->head = n;
+        l->size++;
+        return;
     }
-    
-    
+
+    if(axis_coordenates_get_y(head_coordinates) != index ){
+        node_set_row_previous(n, NULL);
+        node_set_row_next(n, l->head);
+        node_set_row_previous(l->head, n);
+        l->head = n;
+        l->size++;
+        return;
+    }
     
     l->head = reference;
     l->size++;
