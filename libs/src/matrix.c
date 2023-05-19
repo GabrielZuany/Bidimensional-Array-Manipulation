@@ -4,6 +4,7 @@
 #include "../include/list.h"
 #include "../include/node.h"
 #include "../include/axis_coordinates.h"
+#include <math.h>
 
 struct Matrix
 {
@@ -48,6 +49,9 @@ List *matrix_get_full_row(Matrix *m, int row){
 }
 
 Node *matrix_get_node_by_coordinates(Matrix *m, int row, int column){
+    if(row < 0 || column < 0 || row >= m->rows_size || column >= m->columns_size){
+        return NULL;
+    }
     List *list = m->rows[row];
     Node *node = list_get_head(list);
     while(node != NULL){
@@ -77,6 +81,19 @@ void matrix_print(Matrix *m){
         }
         printf("]");
         printf("\n");
+    }
+}
+
+void matrix_sequential_fill(Matrix *m){
+    int rows_size = m->rows_size;
+    int columns_size = m->columns_size;
+    int r_idx, c_idx;
+    data_type count = 1;
+    for(r_idx = 0; r_idx < rows_size; r_idx++){
+        for(c_idx = 0; c_idx < columns_size; c_idx++){
+            list_push_back(m->rows[r_idx], count, construct_axis_coordinates(r_idx, c_idx));
+            count++;
+        }
     }
 }
 
@@ -321,16 +338,18 @@ void matrix_insert_element(Matrix *m, int row, int column, data_type value){
 }
 
 Matrix *matrix_slice(Matrix* m, AxisCoordinates* init, AxisCoordinates* end){
-    Matrix *slice = matrix_construct();
     int row_init = axis_coordenates_get_x(init);
     int row_end = axis_coordenates_get_x(end);
     int column_init = axis_coordenates_get_y(init);
     int column_end = axis_coordenates_get_y(end);
-    matrix_set_row_size(slice, row_end - row_init + 1);
-    matrix_set_column_size(slice, column_end - column_init + 1);
-    matrix_rows_init(slice, row_end - row_init + 1);
 
-    data_type values[m->rows_size*m->columns_size];
+    Matrix *slice = matrix_construct();
+    matrix_set_row_size(slice, abs(row_end - row_init + 1));
+    matrix_set_column_size(slice, abs(column_end - column_init + 1));
+    matrix_rows_init(slice, abs(row_end - row_init + 1));
+
+    data_type values[slice->rows_size*slice->columns_size];
+
     Node* n = NULL;
     int count = 0;
     for(int i = row_init; i <= row_end; i++){
@@ -374,6 +393,87 @@ Matrix *matrix_transpose(Matrix* m){
     matrix_fill(m_T, values);
     matrix_fix_nodes(m_T);
     return m_T;
+}
+
+data_type matrix_sum_all(Matrix* m){
+    int matrix_rows_size = m->rows_size;
+    int matrix_columns_size = m->columns_size;
+    int matrix_row_idx, matrix_column_idx;
+    data_type sum = 0;
+    for(matrix_row_idx = 0; matrix_row_idx < matrix_rows_size; matrix_row_idx++){
+        for(matrix_column_idx = 0; matrix_column_idx < matrix_columns_size; matrix_column_idx++){
+            Node * n = matrix_get_node_by_coordinates(m, matrix_row_idx, matrix_column_idx);
+            if(n == NULL){
+                continue;
+            }
+            sum+= node_get_value(n);
+        }
+    }
+    return sum;
+}
+
+Matrix *matrix_convolution(Matrix* m, Matrix* kernel){
+    int matrix_rows_size = m->rows_size;
+    int matrix_columns_size = m->columns_size;
+    int matrix_row_idx, matrix_column_idx;
+
+    int kernel_rows_size = kernel->rows_size;
+    int kernel_columns_size = kernel->columns_size;
+    int kernel_row_idx, kernel_column_idx;
+
+    int r_init = -(kernel_rows_size-1)/2;
+    int c_init = -(kernel_columns_size-1)/2;
+    int r_end = -r_init;
+    int c_end = -c_init;
+    int c_init_save = c_init;
+    int c_end_save = c_end;
+    
+    AxisCoordinates *init = construct_axis_coordinates(r_init, c_init);
+    AxisCoordinates *end = construct_axis_coordinates(r_end, c_end);
+    
+    Matrix *convolution_result = matrix_construct();
+    matrix_set_row_size(convolution_result, matrix_rows_size);
+    matrix_set_column_size(convolution_result, matrix_columns_size);
+    matrix_rows_init(convolution_result, matrix_rows_size);
+
+    Matrix* kernel_x_matrix = NULL;
+    Matrix *m_slice = NULL;
+    
+    data_type values[matrix_rows_size*matrix_columns_size];
+    int pos = 0;
+
+    for(matrix_row_idx = 0; matrix_row_idx < matrix_rows_size; matrix_row_idx++){
+        c_init = c_init_save;
+        c_end = c_end_save;
+        axis_coordinates_update_y(init, c_init);
+        axis_coordinates_update_y(end, c_end);
+
+        for(matrix_column_idx = 0; matrix_column_idx < matrix_columns_size; matrix_column_idx++){
+            m_slice = matrix_slice(m, init, end);
+            matrix_fix_nodes(m_slice);
+
+            kernel_x_matrix = matrix_multiplication_by_coordinates(m_slice, kernel);
+            values[pos] = matrix_sum_all(kernel_x_matrix);
+
+            c_end++;
+            c_init++;
+            axis_coordinates_update_y(init, c_init);
+            axis_coordinates_update_y(end, c_end);
+            pos++;
+            matrix_destroy(m_slice);
+            matrix_destroy(kernel_x_matrix);
+        }
+        r_end++;
+        r_init++;
+        axis_coordinates_update_x(init, r_init);
+        axis_coordinates_update_x(end, r_end);
+    }
+    matrix_fill(convolution_result, values);
+    matrix_fix_nodes(convolution_result);
+
+    axis_coordinates_destroy(init);
+    axis_coordinates_destroy(end);
+    return convolution_result;
 }
 
 void matrix_destroy(Matrix *m){

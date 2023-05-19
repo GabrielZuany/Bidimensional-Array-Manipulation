@@ -24,6 +24,8 @@ List *matrix_get_full_row(Matrix *m, int row);
 
 Node *matrix_get_node_by_coordinates(Matrix *m, int row, int column);
 
+void matrix_sequential_fill(Matrix *m);
+
 void matrix_fill(Matrix *m, data_type *values);
 
 void matrix_fill_zeros(Matrix *m);
@@ -49,6 +51,8 @@ void matrix_insert_element(Matrix *m, int row, int column, data_type value);
 Matrix *matrix_slice(Matrix* m, AxisCoordinates* init, AxisCoordinates* end);
 
 Matrix *matrix_transpose(Matrix* m);
+
+Matrix *matrix_convolution(Matrix* m, Matrix* kernel);
 
 void matrix_destroy(Matrix *m);
 

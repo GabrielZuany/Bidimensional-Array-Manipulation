@@ -12,4 +12,9 @@ Bidimensional array manipulation using linear algebra and linked lists data stru
 > - Atribuir valores à uma célula a partir da linha e coluna. [V]
 > - Trocar (swap) duas colunas. [V]
 > - Transpor uma matriz. [V]
-> - Realizar a convolução de uma matriz por outra matriz chamada de kernel
+> - Realizar a convolução de uma matriz por outra matriz chamada de kernel [V]
+> - Mostrar uma matriz na tela em formato denso. [V]
+> 
+> - Mostrar uma matriz na tela em formato esparso (apenas os itens diferentes de zero).
+> - Salvar matriz esparsa em um arquivo binário. Apenas os valores não nulos devem ser salvos.
+> - Ler matriz esparsa de um arquivo binário.

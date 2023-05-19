@@ -17,4 +17,6 @@ void axis_coordinates_update_x(AxisCoordinates *coordinates, int x);
 
 void axis_coordinates_update_y(AxisCoordinates *coordinates, int y);
 
+void axis_coordinates_destroy(AxisCoordinates *coordinates);
+
 #endif
