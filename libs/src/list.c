@@ -196,7 +196,7 @@ void list_insert(List*l, Node* n, int index){
         return;
     }
 
-    if(axis_coordenates_get_y(head_coordinates) != index ){
+    if(axis_coordinates_get_y(head_coordinates) != index ){
         node_set_row_previous(n, NULL);
         node_set_row_next(n, l->head);
         node_set_row_previous(l->head, n);

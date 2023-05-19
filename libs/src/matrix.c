@@ -56,7 +56,7 @@ Node *matrix_get_node_by_coordinates(Matrix *m, int row, int column){
     Node *node = list_get_head(list);
     while(node != NULL){
         AxisCoordinates *axis_coordinates = node_get_coordinates(node);
-        if(axis_coordenates_get_y(axis_coordinates) == column){
+        if(axis_coordinates_get_y(axis_coordinates) == column){
             return node;
         }
         if(node_get_row_next(node) == NULL){
@@ -67,7 +67,7 @@ Node *matrix_get_node_by_coordinates(Matrix *m, int row, int column){
     return NULL;
 }
 
-void matrix_print(Matrix *m){
+void matrix_print_with_null(Matrix *m){
     int i = 0, j = 0;
     for(i = 0; i < m->rows_size; i++){
         printf("[");
@@ -84,6 +84,32 @@ void matrix_print(Matrix *m){
     }
 }
 
+void matrix_print_with_zeros(Matrix *m){
+    int i = 0, j = 0;
+    for(i = 0; i < m->rows_size; i++){
+        printf("[ ");
+        for(j = 0; j < m->columns_size; j++){
+            Node *node = matrix_get_node_by_coordinates(m, i, j);
+            printf("%.2lf, ", node_get_value(node));
+        }
+        printf("]");
+        printf("\n");
+    }
+}
+
+void matrix_sparse_print(Matrix *m){
+    int i = 0, j = 0;
+    for(i = 0; i < m->rows_size; i++){
+        for(j = 0; j < m->columns_size; j++){
+            Node *node = matrix_get_node_by_coordinates(m, i, j);
+            if(node != NULL){
+                axis_coordinates_print(node_get_coordinates(node));
+                printf(": %.2lf\n", node_get_value(node));
+            }
+        }
+    }
+}
+
 void matrix_sequential_fill(Matrix *m){
     int rows_size = m->rows_size;
     int columns_size = m->columns_size;
@@ -91,6 +117,10 @@ void matrix_sequential_fill(Matrix *m){
     data_type count = 1;
     for(r_idx = 0; r_idx < rows_size; r_idx++){
         for(c_idx = 0; c_idx < columns_size; c_idx++){
+            if(count == 0){
+                count++;
+                continue;
+            }
             list_push_back(m->rows[r_idx], count, construct_axis_coordinates(r_idx, c_idx));
             count++;
         }
@@ -176,12 +206,6 @@ void matrix_fix_nodes(Matrix *m){
             node_set_column_next(node, column_next);
             node_set_column_previous(node, column_prev);
         }
-    }
-}
-
-void matrix_print_rows(Matrix *m, void (*fptr_print_fn)(data_type)){
-    for(int i = 0; i < m->rows_size; i++){
-        list_print(m->rows[i], fptr_print_fn);
     }
 }
 
@@ -338,10 +362,10 @@ void matrix_insert_element(Matrix *m, int row, int column, data_type value){
 }
 
 Matrix *matrix_slice(Matrix* m, AxisCoordinates* init, AxisCoordinates* end){
-    int row_init = axis_coordenates_get_x(init);
-    int row_end = axis_coordenates_get_x(end);
-    int column_init = axis_coordenates_get_y(init);
-    int column_end = axis_coordenates_get_y(end);
+    int row_init = axis_coordinates_get_x(init);
+    int row_end = axis_coordinates_get_x(end);
+    int column_init = axis_coordinates_get_y(init);
+    int column_end = axis_coordinates_get_y(end);
 
     Matrix *slice = matrix_construct();
     matrix_set_row_size(slice, abs(row_end - row_init + 1));
@@ -419,7 +443,6 @@ Matrix *matrix_convolution(Matrix* m, Matrix* kernel){
 
     int kernel_rows_size = kernel->rows_size;
     int kernel_columns_size = kernel->columns_size;
-    int kernel_row_idx, kernel_column_idx;
 
     int r_init = -(kernel_rows_size-1)/2;
     int c_init = -(kernel_columns_size-1)/2;

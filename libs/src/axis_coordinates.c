@@ -15,24 +15,20 @@ AxisCoordinates* construct_axis_coordinates(int x, int y){
     return coordinates;
 }
 
-int axis_coordenates_get_x(AxisCoordinates *coordinates){
+int axis_coordinates_get_x(AxisCoordinates *coordinates){
     return coordinates->x;
 }
 
-int axis_coordenates_get_y(AxisCoordinates *coordinates){
+int axis_coordinates_get_y(AxisCoordinates *coordinates){
     return coordinates->y;
 }
 
-void axis_coordenates_print(AxisCoordinates *coordinates){
+void axis_coordinates_print(AxisCoordinates *coordinates){
     if(coordinates == NULL){
         printf("NULL");
         return;
     }
     printf("(%d, %d)", coordinates->x, coordinates->y);
-}
-
-void axis_coordenates_destroy(AxisCoordinates *coordinates){
-    free(coordinates);
 }
 
 void axis_coordinates_update_x(AxisCoordinates *coordinates, int x){

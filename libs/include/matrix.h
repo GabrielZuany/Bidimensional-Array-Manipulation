@@ -8,8 +8,6 @@ typedef struct Matrix Matrix;
 
 Matrix *matrix_construct();
 
-void matrix_print_rows(Matrix *m, void (*fptr_print_fn)(data_type));
-
 void matrix_rows_init(Matrix *m, int size);
 
 void matrix_set_row_size(Matrix *m, int size);
@@ -32,7 +30,11 @@ void matrix_fill_zeros(Matrix *m);
 
 void matrix_fix_nodes(Matrix *m);
 
-void matrix_print(Matrix *m);
+void matrix_print_with_null(Matrix *m);
+
+void matrix_print_with_zeros(Matrix *m);
+
+void matrix_sparse_print(Matrix *m);
 
 Matrix *matrix_sum(Matrix* m1, Matrix* m2);
 
