@@ -125,7 +125,7 @@ void matrix_print_with_null(Matrix *m){
             if(node == NULL){
                 printf("NULL, ");
             }else{
-                printf("%.2lf, ", node_get_value(node));
+                printf("%.3lf, ", node_get_value(node));
             }
         }
         printf("]");

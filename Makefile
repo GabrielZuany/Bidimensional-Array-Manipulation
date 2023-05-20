@@ -2,6 +2,8 @@ all:
 	gcc -pg -g -Wall -o main libs/implementation/*.c source/main.c -lm
 run:
 	./main
+generate:
+	python3 generator/generator.py
 val:
 	valgrind --leak-check=full --show-leak-kinds=all ./main
 profile:
