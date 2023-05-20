@@ -15,6 +15,5 @@ Bidimensional array manipulation using linear algebra and linked lists data stru
 > - Realizar a convolução de uma matriz por outra matriz chamada de kernel [V]
 > - Mostrar uma matriz na tela em formato denso. [V]
 > - Mostrar uma matriz na tela em formato esparso (apenas os itens diferentes de zero). [V]
-> 
-> - Salvar matriz esparsa em um arquivo binário. Apenas os valores não nulos devem ser salvos.
-> - Ler matriz esparsa de um arquivo binário.
+> - Salvar matriz esparsa em um arquivo binário. Apenas os valores não nulos devem ser salvos. [V]
+> - Ler matriz esparsa de um arquivo binário. [V]

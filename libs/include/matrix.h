@@ -8,6 +8,10 @@ typedef struct Matrix Matrix;
 
 Matrix *matrix_construct();
 
+void matrix_save_binary(Matrix *m, char *filename);
+
+Matrix *matrix_read_binary(char *filename);
+
 void matrix_rows_init(Matrix *m, int size);
 
 void matrix_set_row_size(Matrix *m, int size);

@@ -10,6 +10,8 @@ int main()
 {
     int m_r = 9, m_c = 9;
 
+    //Matrix *matrix = matrix_read_binary("matrix.bin");
+
     Matrix *matrix = matrix_construct();
 
     matrix_set_row_size(matrix, m_r);
@@ -20,6 +22,8 @@ int main()
     matrix_fix_nodes(matrix);
 
     matrix_print_with_null(matrix);
+
+    matrix_save_binary(matrix, "matrix.bin");
 
     matrix_destroy(matrix);
     return 0;

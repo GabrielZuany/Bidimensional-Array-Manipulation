@@ -1,5 +1,5 @@
 all:
-	gcc -pg -g -Wall -o main libs/src/*.c source/main.c -lm
+	gcc -pg -g -Wall -o main libs/implementation/*.c source/main.c -lm
 run:
 	./main
 val:

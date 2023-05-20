@@ -5,6 +5,7 @@
 #include "../include/node.h"
 #include "../include/axis_coordinates.h"
 #include <math.h>
+#include <string.h>
 
 struct Matrix
 {
@@ -12,6 +13,54 @@ struct Matrix
     int rows_size;
     int columns_size;
 };
+
+void matrix_save_binary(Matrix *m, char *filename){
+    FILE *file = fopen(filename, "wb");
+    fwrite(&m->rows_size, sizeof(int), 1, file);
+    fwrite(&m->columns_size, sizeof(int), 1, file);
+    
+    for(int i = 0; i < m->rows_size; i++){
+        for(int j = 0; j < m->columns_size; j++){
+            Node *node = matrix_get_node_by_coordinates(m, i, j);
+            if(node != NULL){
+                data_type value = node_get_value(node);
+                fwrite(&value, sizeof(data_type), 1, file);
+            }else{
+                char empty[] = "null";
+                fwrite(empty, sizeof(char), 4, file);
+            }
+        }
+    }
+    fclose(file);
+}
+
+Matrix *matrix_read_binary(char *filename){
+    FILE *file = fopen(filename, "rb");
+    Matrix *m = matrix_construct();
+    fread(&m->rows_size, sizeof(int), 1, file);
+    fread(&m->columns_size, sizeof(int), 1, file);
+    matrix_rows_init(m, m->rows_size);
+    data_type values[m->rows_size * m->columns_size];
+    int index = 0;
+    for(int i = 0; i < m->rows_size; i++){
+        for(int j = 0; j < m->columns_size; j++){
+            char empty[5];
+            fread(empty, sizeof(char), 4, file);
+            empty[4] = '\0';
+            if(strcmp(empty, "null") == 0){
+                values[index] = 0;
+            }else{
+                fseek(file, -4, SEEK_CUR);
+                fread(&values[index], sizeof(data_type), 1, file);
+            }
+            index++;
+        }
+    }
+    matrix_fill(m, values);
+    matrix_fix_nodes(m);
+    fclose(file);
+    return m;
+}
 
 Matrix *matrix_construct(){
     Matrix *m = (Matrix *)malloc(sizeof(Matrix));
