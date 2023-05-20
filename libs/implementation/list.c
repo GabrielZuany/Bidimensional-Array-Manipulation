@@ -26,7 +26,6 @@ void list_set_head(List *l, Node *head){
     l->head = head;
 }
 
-
 void list_set_last(List *l, Node *last){
     l->last = last;
 }
@@ -175,15 +174,6 @@ void list_remove(List *l, data_type val){
             n = node_get_row_next(n);
         }
     }
-}
-
-void list_cat(List *l, List *m){
-    Node* reference = l->head;
-    while(l->head != NULL){
-        l->head = node_get_row_next(l->head);
-    }
-    l->head = m->head;
-    l->head = reference;
 }
 
 void list_insert(List*l, Node* n, int index){

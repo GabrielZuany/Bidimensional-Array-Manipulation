@@ -6,7 +6,9 @@ val:
 	valgrind --leak-check=full --show-leak-kinds=all ./main
 profile:
 	./main
-	gprof main gmon.out > analysis.txt
+	gprof main gmon.out > AlgorithmAnalysis/data/analysis.txt
+shared_lib:
+	gcc -fPIC -shared -o matrix.so libs/implementation/*.c	
 clean:
 	rm -f main
 	rm -f gmon.out
