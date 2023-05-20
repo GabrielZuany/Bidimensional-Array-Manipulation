@@ -17,8 +17,8 @@ Bidimensional array manipulation using linear algebra and linked lists data stru
 > - Mostrar uma matriz na tela em formato esparso (apenas os itens diferentes de zero). [V]
 > - Salvar matriz esparsa em um arquivo binário. Apenas os valores não nulos devem ser salvos. [V]
 > - Ler matriz esparsa de um arquivo binário. [V]
->
-> Complexidade.
+> Complexidade.[V]
+> 
 > Menu C.
 > Generators de casos de teste em PY.
 > Análise de desempenho com relatório.
