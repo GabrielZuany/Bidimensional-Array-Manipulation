@@ -23,7 +23,7 @@ In cases where the matrices have high dimensions, the use of a representation sp
 The data structure used to build the **Matrix** ADT (*[Abstract Data Type](https://eecs280staff.github.io/notes/07_ADTs_in_C.html)*) was based on double linked list (os just **[List](https://www.programiz.com/dsa/doubly-linked-list)**).
 
 
-Basically, each matrix line is a linked list in which each **Node** ADT contains, internally, 4 Node pointers. So, I chose to use just one **List** array to represent the matrix to save memory and build the functions mostly manipulating the **Node**. 
+Basically, each matrix line is a linked list in which each **Node** ADT contains, internally, 4 Node pointers. So, I chose to use just one **List** array to represent the matrix to save memory and build the functions manipulating the **Node** mostly. 
 
 
 ```C
@@ -65,7 +65,6 @@ struct Node
 > * The user of these ADT just need to call the free functions to deallocate the [heap](https://opendsa-server.cs.vt.edu/ODSA/Books/CS2/html/HeapMem.html).
 > 
 > * Unfortunally, C does not have a *[garbage collector](https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/fundamentals)* like C# or Python, for example.
->
 > <br>
 
 ---
@@ -176,7 +175,7 @@ struct Node
 # Functions
 
 1. Create and destruct matrix.
-2. Assign values ​​to a node from row and column.
+2. Assign values to a node from row and column.
 3. Read node values from row and column.
 4. Fill matrix with zeros.
 5. Fill matrix with sequential values.
@@ -237,7 +236,7 @@ $ make run
 
 <br>
 
-Each time you select one of menu options, a Python script (using [scipy](https://scipy.org/)) is called to generate random sparse matrices and save them into binary files. Then, the C source code open and read it to store into **Matrix** structure.
+Each time you select one of menu options, a Python script is called to generate random sparse matrices and save them into binary files. Then, the C source code open and read it to store into **Matrix** structure.
 
 So, for each menu call, we have different sparse matrices to test the algorithm.
 
