@@ -1,9 +1,7 @@
 from scipy.sparse import random
 from scipy import stats
-import scipy
 from numpy.random import default_rng
 import numpy as np
-from PIL import Image
 
 def convolve2d(image, kernel):
     kernel = np.flipud(np.fliplr(kernel)) # flip the kernel
