@@ -130,7 +130,9 @@ struct Node
 > - Visual implementation : 
 > <br>
 > <br>
-> ![](assets/double_linked_list.png)
+> 
+>![](assets/double_linked_list.png)
+>
 > <br>
 > <br>
 
@@ -160,7 +162,9 @@ struct Node
 > - Visual implementation : 
 > <br>
 > <br>
-> ![](assets/node.png)
+> 
+>![](assets/node.png)
+> 
 > <br>
 > <br>
 
