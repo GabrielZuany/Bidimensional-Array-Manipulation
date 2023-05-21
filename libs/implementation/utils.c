@@ -1,6 +1,19 @@
 #include <stdio.h>
 #include <stdio.h>
 #include "../include/utils.h"
+#define True 1
+#define False 0
+
+void save_in_binary(Matrix* m){
+    printf("Do you want to save the result in a binary file? [1: Yes, 0: No]\n>>>");
+    int option = 0;
+    scanf("%d", &option);
+
+    if(option == 1){
+        matrix_save_binary(m, "generator/c_result.bin");
+        printf("Result saved in generator/c_result.bin\n");
+    }
+}
 
 void menu_matrix_convolution(){
     system("make generate");
@@ -19,6 +32,8 @@ void menu_matrix_convolution(){
     printf("Result:\n");
     matrix_print_with_null(result);
     printf("\n");
+
+    save_in_binary(result);
 
     matrix_destroy(matrix);
     matrix_destroy(kernel);
@@ -46,6 +61,8 @@ void menu_matrix_transpose(){
     printf("Transpose Matrix 2:\n");
     matrix_print_with_null(matrix_2_transpose);
 
+    save_in_binary(matrix_1_transpose);
+
     matrix_destroy(matrix_1);
     matrix_destroy(matrix_1_transpose);
     matrix_destroy(matrix_2);
@@ -72,6 +89,8 @@ void menu_matrix_multiplication(){
 
     printf("\n-----\n");
 
+    save_in_binary(matrix_1_x_matrix_2);
+
     matrix_destroy(matrix_1);
     matrix_destroy(matrix_2);
     matrix_destroy(matrix_1_x_matrix_2);
@@ -96,6 +115,8 @@ void menu_matrix_multiplication_by_constant(){
 
     printf("\n-----\n");
 
+    save_in_binary(matrix_1_x_2);
+
     matrix_destroy(matrix_1);
     matrix_destroy(matrix_1_x_2);
 }
@@ -119,6 +140,9 @@ void menu_matrix_multiplication_coordinates_by_coordinates(){
     matrix_print_with_null(matrix_1_x_matrix_2);
 
     printf("\n-----\n");
+
+    save_in_binary(matrix_1_x_matrix_2);
+
     matrix_destroy(matrix_1);
     matrix_destroy(matrix_2);
     matrix_destroy(matrix_1_x_matrix_2);
@@ -143,6 +167,8 @@ void menu_matrix_sum(){
     matrix_print_with_null(matrix_1_plus_matrix_2);
 
     printf("\n-----\n");
+
+    save_in_binary(matrix_1_plus_matrix_2);
 
     matrix_destroy(matrix_1);
     matrix_destroy(matrix_2);
@@ -178,6 +204,8 @@ void menu_matrix_slice(){
 
     printf("\n-----\n");
 
+    save_in_binary(slice);
+
     matrix_destroy(matrix);
     matrix_destroy(slice);
     axis_coordinates_destroy(start);
@@ -203,6 +231,7 @@ void menu_matrix_get_value_by_coordinates(){
     printf("(%d,%d) : %.2lf\n", row, column, value);
 
     printf("\n-----\n");
+
     matrix_destroy(matrix);
 }
 
@@ -230,6 +259,9 @@ void menu_matrix_set_value_by_coordinates(){
     matrix_print_with_null(matrix);
 
     printf("\n-----\n");
+
+    save_in_binary(matrix);
+    
     matrix_destroy(matrix);
 }
 
@@ -254,6 +286,9 @@ void menu_matrix_swap_rows(){
     matrix_print_with_null(matrix);
 
     printf("\n-----\n");
+
+    save_in_binary(matrix);
+
     matrix_destroy(matrix);
 }
 
@@ -279,5 +314,8 @@ void menu_matrix_swap_columns(){
     matrix_print_with_null(matrix);
 
     printf("\n-----\n");
+
+    save_in_binary(matrix);
+
     matrix_destroy(matrix);
 }
