@@ -3,18 +3,6 @@ from scipy import stats
 from numpy.random import default_rng
 import numpy as np
 
-def convolve2d(image, kernel):
-    kernel = np.flipud(np.fliplr(kernel)) # flip the kernel
-    output = np.zeros_like(image) # convolution output
-    # Add zero padding to the input image
-    image_padded = np.zeros((image.shape[0] + 2, image.shape[1] + 2))   
-    image_padded[1:-1, 1:-1] = image
-    for x in range(image.shape[1]):     # Loop over every pixel of the image
-        for y in range(image.shape[0]):
-            # element-wise multiplication of the kernel and the image
-            output[y,x]=(kernel*image_padded[y:y+3,x:x+3]).sum()        
-    return output
-
 def matrix_binary_save(filename, matrix):
     try:
         f = open(filename, 'wb')

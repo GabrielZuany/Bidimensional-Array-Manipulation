@@ -29,5 +29,7 @@ void menu_matrix_swap_rows();
 
 void menu_matrix_swap_columns();
 
+void menu_matrix_show_binary();
+
 
 #endif

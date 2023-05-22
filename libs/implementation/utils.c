@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdio.h>
 #include "../include/utils.h"
-#define True 1
-#define False 0
 
 void save_in_binary(Matrix* m){
     printf("Do you want to save the result in a binary file? [1: Yes, 0: No]\n>>>");
@@ -25,7 +23,7 @@ void menu_matrix_convolution(){
     matrix_print_with_null(matrix);
 
     printf("\n-----\n");
-    printf("Kernel (Gauss kernel, blur):\n");
+    printf("Kernel:\n");
     matrix_print_with_null(kernel);
 
     printf("\n-----\n");
@@ -316,6 +314,39 @@ void menu_matrix_swap_columns(){
     printf("\n-----\n");
 
     save_in_binary(matrix);
+
+    matrix_destroy(matrix);
+}
+
+void menu_matrix_show_binary(){
+    Matrix* matrix = NULL;
+    int selector = 0;
+    printf("Select matrix:\n");
+    printf("[1] - Matrix 1\n");
+    printf("[2] - Matrix 2\n");
+    printf("[3] - Last Result\n");
+
+    scanf("%d", &selector);
+    switch (selector)
+    {
+    case 1:
+        matrix = matrix_read_binary("generator/matrix_1.bin");
+        break;
+    case 2:
+        matrix = matrix_read_binary("generator/matrix_2.bin");
+        break;
+    case 3:
+        matrix = matrix_read_binary("generator/c_result.bin");
+        break;
+    default:
+        break;
+    }
+
+    printf("\n-----\n");
+    printf("Matrix:\n");
+    matrix_print_with_null(matrix);
+
+    printf("\n-----\n");
 
     matrix_destroy(matrix);
 }
