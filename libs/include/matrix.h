@@ -7,15 +7,16 @@
 typedef struct Matrix Matrix;
 
 
+
 /**
- * @brief Construct a new Matrix struct
+ * @brief Construct a new Matrix object
  * 
  * @return Matrix* 
  * 
- * @note The matrix is initialized with 0 rows and 0 columns
- * @note Complexity: O(1). Is not necessary to iterate over the matrix.
+ * @note Complexity: O(N). 
+ * Is necessary to iterate over the matrix to allocate the lists.
  */
-Matrix *matrix_construct();
+Matrix *matrix_construct(int rows_size, int columns_size);
 
 
 /**
@@ -57,28 +58,6 @@ Matrix *matrix_read_binary(char *filename);
  * @note Complexity: O(1). Is not necessary to iterate over the matrix. 
  */
 void matrix_rows_init(Matrix *m, int size);
-
-
-/**
- * @brief Set the matrix number of rows
- * 
- * @param m 
- * @param size
- * 
- * @note Complexity: O(1). Is not necessary to iterate over the matrix. 
- */
-void matrix_set_row_size(Matrix *m, int size);
-
-
-/**
- * @brief Set the matrix number of columns
- * 
- * @param m 
- * @param size
- * 
- * @note Complexity: O(1). Is not necessary to iterate over the matrix. 
- */
-void matrix_set_column_size(Matrix *m, int size);
 
 
 /**
